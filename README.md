@@ -6,7 +6,19 @@ The MuleSoft Utility API that provides you with on demand CSV reports on key are
 Reports currently cover: 
 - Runtime Manager: All deployed applications, their vCore allocations, Mule versions, and statuses.
 - API Manager: All configured API instances, their backing assets, and contract counts.
-- Anypoint Monitoring: Reports metrics for all applications including Number of Requests, Performance (percentiles), Error Rates, Average usage on both CPU and Memory 
+- Anypoint Monitoring: Reports metrics for all applications including Number of Requests, Performance (percentiles), Error Rates, Average usage on both CPU and Memory
+
+Use Cases:
+- I want to find all the API Instances that are Inactive or Unmanaged, so that I can delete them and save costs on licenses
+- I want to find potential duplicates
+- I want to find APIs that are not being used enough or at all (Number of Requests, CPU/Memory, etc.)
+- I want to control the amount of vCores my Runtime Manager APIs are using 
+
+## Example CSV Outputs in a Spreadsheet 
+<img width="2014" height="900" alt="image" src="https://github.com/user-attachments/assets/830cb8ac-b130-4ac0-9e0a-39e1690939b7" />
+<img width="1939" height="927" alt="image" src="https://github.com/user-attachments/assets/3a4008aa-02b5-4c7d-920e-c3522786720b" />
+<img width="2016" height="895" alt="image" src="https://github.com/user-attachments/assets/5eb25877-87e3-48de-a915-451af397e566" />
+
 
 ## 🏎️ Getting Started (Quick Start)
 
@@ -20,6 +32,9 @@ You will need an Anypoint Account with the right permission and the ability to s
 6. Use Postman to make the calls to your local server 
 7. Output for all APIs is a CSV file, you will need to copy and paste the CSV in a Spreadsheet (Microsoft or Google) and split by commas. A file where I did 4 calls to my Environment can be seen in the repo
 8. Done you got the data! 
+
+
+
 
 
 ## Disclaimer 
