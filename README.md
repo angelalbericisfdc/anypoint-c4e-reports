@@ -34,6 +34,9 @@ You will need an Anypoint Account with the right permission and the ability to s
 8. Done you got the data! 
 
 
+## Appendix
+When you publish the RAML into Exchange
+<img width="1810" height="1246" alt="image" src="https://github.com/user-attachments/assets/e82a72bd-1b74-4fe1-80e9-6bc71d241654" />
 
 
 
