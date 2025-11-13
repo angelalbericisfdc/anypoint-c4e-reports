@@ -38,6 +38,9 @@ You will need an Anypoint Account with the right permission and the ability to s
 When you publish the RAML into Exchange
 <img width="1810" height="1246" alt="image" src="https://github.com/user-attachments/assets/e82a72bd-1b74-4fe1-80e9-6bc71d241654" />
 
+How does the Postman Collection look like 
+<img width="2316" height="911" alt="image" src="https://github.com/user-attachments/assets/afcbcdb2-7ed9-4c1e-add9-5abcee3899c5" />
+
 
 
 ## Disclaimer 
