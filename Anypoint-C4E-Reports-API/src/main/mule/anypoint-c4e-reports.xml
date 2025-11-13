@@ -1,0 +1,931 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <apikit:config name="anypoint-c4e-reports-config" api="anypoint-c4e-reports.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="e452f662-fd8f-4653-bf44-eff09cc71422">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <http:request-config name="HTTPS_Request_configuration" doc:name="HTTP Request configuration" doc:id="b3073762-909a-4031-ba88-dc3af6c0c6b7" enableCookies="false">
+        <http:request-connection host="anypoint.mulesoft.com" protocol="HTTPS" />
+    </http:request-config>
+    <configuration-properties doc:name="Configuration properties" doc:id="8e019077-097c-48c8-9ad5-47d28fe3610a" file="${env}-properties.yaml" />
+    <global-property doc:name="Global Property" doc:id="ae95d276-7ab5-450f-bbe4-57fd0f6552d5" name="env" value="dev" />
+    <flow name="anypoint-c4e-reports-main">
+        <http:listener config-ref="HTTP_Listener_config" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="anypoint-c4e-reports-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request. Review the OAS/RAML Specification"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[400]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="anypoint-c4e-reports-console">
+        <http:listener config-ref="HTTP_Listener_config" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="anypoint-c4e-reports-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="get:\business-groups\(businessGroupId)\api-manager\api-instances:anypoint-c4e-reports-config">
+        <flow-ref doc:name="Flow Reference for Token and Envs" doc:id="901c91de-7deb-47a6-8375-698d0fb44f5d" name="generatetoken-and-list-all-environments-per-BG-Sub_Flow" />
+        <logger level="INFO" doc:name="Logger" doc:id="954325b5-5122-46e5-b674-5d872f3afa86" message="Preparing to iterate for Each Environment in a Business Group" />
+        <foreach doc:name="For Each" doc:id="1cc5a25e-8185-453d-8d51-341b3a3e4530" collection="payload">
+            <ee:transform doc:name="environment" doc:id="a77bdc21-ff6a-4b37-a056-74a57f1bc90c">
+                <ee:message />
+                <ee:variables>
+                    <ee:set-variable variableName="environment"><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-variable>
+                </ee:variables>
+            </ee:transform>
+            <logger level="INFO" doc:name="Logger" doc:id="642ba729-8eaa-495e-bb1a-54120857ec49" message="Preparing to HTTP Request and get all MuleAPIs in the Environment: #[vars.environment.name]" />
+            <http:request doc:name="Get all API Manager Instances  in envrionment" doc:id="f2bc17f9-1412-4b4a-8d41-d3e74b7bc959" config-ref="HTTPS_Request_configuration" path="/apimanager/api/v1/organizations/{businessGroupId}/environments/{environmentId}/apis" sendCorrelationId="AUTO">
+                <http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : vars.access_token,
+	"X-ANYPNT-ENV-ID" : vars.environment.id,
+	"X-ANYPNT-ORG-ID" : vars.orgId
+}]]]></http:headers>
+                <http:uri-params><![CDATA[#[output application/java
+---
+{
+	environmentId : vars.environment.id,
+	businessGroupId : vars.orgId
+}]]]></http:uri-params>
+            </http:request>
+            <choice doc:name="Choice" doc:id="003af700-01cf-48b7-922b-83e7533d9421">
+                <when expression="#[payload.total == 0]">
+                    <logger level="INFO" doc:name="Logger" doc:id="3a307f66-c42e-48d6-9733-cb11ff14a4ca" message="Environment without any results " />
+                </when>
+                <otherwise>
+                    <ee:transform doc:name="append allAPIs to var allAPIs plus this Environment" doc:id="457fff4e-7998-4cdd-b0f4-dd56b72e6194">
+                        <ee:message>
+                            <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload.assets flatMap (asset) -> (
+    // For each asset, map over its inner 'apis' array
+    asset.apis map (api) -> {
+        // --- Parent Asset Fields (duplicated for each API) ---
+        masterOrganizationId: asset.masterOrganizationId,
+        organizationId: asset.organizationId,
+        apiEnvironmentId: api.environmentId,
+        "Environment Name": vars.environment.name,
+        "Environment Type": vars.environment['type'],
+        "Env. is Prod": vars.environment.isProduction,
+        "API Instance ID (apiId)": api.id,
+        apiStatus: api.status,
+        exchangeAssetName: asset.exchangeAssetName,
+        "Asset Name": asset.name,        
+        apiTechnology: api.technology,
+        apiProductVersion: api.productVersion,
+        apiEndpointType: api.endpointType,
+        totalApis: asset.totalApis,
+        apiActiveContractsCount: api.activeContractsCount,
+        "RuntimeManager API Name CH1 or ID CH2 or empty if Auto-Discovery (endpointApplicationId)": api.deployment.applicationId,
+        assetAuditCreatedDate: asset.audit.created.date,
+        assetAuditUpdatedDate: asset.audit.updated.date default null,
+		apiLastActiveDate: api.lastActiveDate default null,
+        "RuntimeManager endpointTargetId": api.deployment.targetId,
+        "RuntimeManager endpointExpectedStatus": api.deployment.expectedStatus,
+        assetDbId: asset.id, // Renamed from 'id' to avoid clash with api.id
+        groupId: asset.groupId,
+        assetId: asset.assetId,
+        apiAutodiscoveryInstanceName: api.autodiscoveryInstanceName,
+        assetAutodiscoveryApiName: asset.autodiscoveryApiName, 
+
+        // --- Child API Fields (unique for this row) ---
+        apiAssetVersion: api.assetVersion,
+        apiProductVersion: api.productVersion,
+        apiEndpointUri: api.endpointUri default null,
+        
+        apiIsPublic: api.isPublic,
+        apiDeprecated: api.deprecated,
+        
+        // --- Added Fields ---
+        apiMetadata: api.metadata default null,
+        apiPinned: api.pinned
+    }
+)]]></ee:set-payload>
+                        </ee:message>
+                        <ee:variables />
+                    </ee:transform>
+                    <ee:transform doc:name="append allAPIs to var allAPIs plus this Environment1" doc:id="13957711-f661-4f68-be52-622148edd65f">
+                        <ee:message />
+                        <ee:variables>
+                            <ee:set-variable variableName="allAPIs"><![CDATA[%dw 2.0
+output application/json
+---
+vars.allAPIs ++ payload]]></ee:set-variable>
+                        </ee:variables>
+                    </ee:transform>
+                </otherwise>
+            </choice>
+        </foreach>
+        <logger level="INFO" doc:name="Logger1" doc:id="026e1ae4-3707-4d57-8ee4-4f1d24a64fe1" message="All APIs in All Environments have been consolidated. Preparing the output..." />
+        <ee:transform doc:name="add Environment to each API" doc:id="66c2fd1b-4cb6-4e13-8baa-5cb8c4f1049d">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+import * from dw::core::Dates
+output application/csv quoteValues = true
+---
+vars.allAPIs]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <logger level="INFO" doc:name="Logger2" doc:id="ae9ccea0-7388-4c1d-9d5f-8e4eb0758ea2" message="Report produced and returned successfully" />
+    </flow>
+    <flow name="get:\business-groups\(businessGroupId)\monitoring\reports:anypoint-c4e-reports-config" doc:id="b641b708-1c3b-4ccf-b21f-084b45dd8b27">
+        <flow-ref doc:name="Flow Reference for Token and Envs" doc:id="3fa857b4-6465-4e71-87ef-e0a859a918fa" name="generatetoken-and-list-all-environments-per-BG-Sub_Flow" />
+        <logger level="INFO" doc:name="Logger" doc:id="2112fcd3-d828-4be9-a9a4-00f308e138ae" message="Preparing to iterate for Each Environment in a Business Group" />
+        <foreach doc:name="For Each" doc:id="f0202381-d5c3-4e0c-b6ac-37d1e38a96bc" collection="payload">
+            <ee:transform doc:name="environment" doc:id="5831eca7-c638-4d44-820a-270e5c0e5d0e">
+                <ee:message />
+                <ee:variables>
+                    <ee:set-variable variableName="environment"><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-variable>
+                </ee:variables>
+            </ee:transform>
+            <logger level="INFO" doc:name="Logger" doc:id="b40d3c6a-bd91-4407-abc3-60f79783aa8b" message="Preparing to call all Reports from Anypoint Monitoring. Environment: #[vars.environment.name]" />
+            <scatter-gather doc:name="Scatter-Gather" doc:id="fd66e107-ecd4-4b69-899f-0c1704923e3d">
+                <route>
+                    <http:request doc:name="Get Performance for all APIs in Environment" doc:id="fe943c33-3bdc-44cb-b92c-d00ddff95369" config-ref="HTTPS_Request_configuration" path="/monitoring/api/organizations/{businessGroupId}/environments/{environmentId}/reports/performance/from/now-90d/to/now?" sendCorrelationId="AUTO">
+                        <http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : vars.access_token
+}]]]></http:headers>
+                        <http:uri-params><![CDATA[#[output application/java
+---
+{
+	environmentId : vars.environment.id,
+	businessGroupId : vars.orgId
+}]]]></http:uri-params>
+                    </http:request>
+                    <ee:transform doc:name="Transform Message" doc:id="b71935bd-c7ca-4e65-8a72-55e13b06a26e">
+                        <ee:message>
+                            <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload['applicationData']]]></ee:set-payload>
+                        </ee:message>
+                        <ee:variables />
+                    </ee:transform>
+                </route>
+                <route>
+                    <http:request doc:name="Get Total Requests for all APIs in Environment" doc:id="abf8a8ae-aaa6-4909-8044-28745a622d09" config-ref="HTTPS_Request_configuration" path="/monitoring/api/organizations/{businessGroupId}/environments/{environmentId}/reports/requests/from/now-90d/to/now?" sendCorrelationId="AUTO">
+                        <http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : vars.access_token
+}]]]></http:headers>
+                        <http:uri-params><![CDATA[#[output application/java
+---
+{
+	environmentId : vars.environment.id,
+	businessGroupId : vars.orgId
+}]]]></http:uri-params>
+                    </http:request>
+                    <ee:transform doc:name="Transform Message" doc:id="f975e101-4878-4b32-a971-47289cc149b9">
+                        <ee:message>
+                            <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload['applicationData']]]></ee:set-payload>
+                        </ee:message>
+                        <ee:variables />
+                    </ee:transform>
+                </route>
+                <route>
+                    <http:request doc:name="Get Total failures for all APIs in Environment" doc:id="c75123cd-cf54-4311-a67f-ebc7f3d53106" config-ref="HTTPS_Request_configuration" path="/monitoring/api/organizations/{businessGroupId}/environments/{environmentId}/reports/failures/from/now-90d/to/now?" sendCorrelationId="AUTO">
+                        <http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : vars.access_token
+}]]]></http:headers>
+                        <http:uri-params><![CDATA[#[output application/java
+---
+{
+	environmentId : vars.environment.id,
+	businessGroupId : vars.orgId
+}]]]></http:uri-params>
+                    </http:request>
+                    <ee:transform doc:name="Transform Message" doc:id="6091b60b-4784-4e48-9512-d12d10f3b822">
+                        <ee:message>
+                            <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload['applicationData']]]></ee:set-payload>
+                        </ee:message>
+                        <ee:variables />
+                    </ee:transform>
+                </route>
+                <route>
+                    <http:request doc:name="Get cpu-utilization for all APIs in Environment" doc:id="b5936368-e1d9-4041-a9ab-a99436f4776b" config-ref="HTTPS_Request_configuration" path="/monitoring/api/organizations/{businessGroupId}/environments/{environmentId}/reports/cpu-utilization/from/now-90d/to/now?" sendCorrelationId="AUTO">
+                        <http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : vars.access_token
+}]]]></http:headers>
+                        <http:uri-params><![CDATA[#[output application/java
+---
+{
+	environmentId : vars.environment.id,
+	businessGroupId : vars.orgId
+}]]]></http:uri-params>
+                    </http:request>
+                    <ee:transform doc:name="Transform Message" doc:id="76c3da31-70f0-4335-ac64-085f2e55e359">
+                        <ee:message>
+                            <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload['applicationData']]]></ee:set-payload>
+                        </ee:message>
+                        <ee:variables />
+                    </ee:transform>
+                </route>
+                <route>
+                    <http:request doc:name="Get memory-utilization for all APIs in Environment" doc:id="2edca261-3cca-42ce-9852-bc9d7d8f7114" config-ref="HTTPS_Request_configuration" path="/monitoring/api/organizations/{businessGroupId}/environments/{environmentId}/reports/memory-utilization/from/now-90d/to/now?" sendCorrelationId="AUTO">
+                        <http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : vars.access_token
+}]]]></http:headers>
+                        <http:uri-params><![CDATA[#[output application/java
+---
+{
+	environmentId : vars.environment.id,
+	businessGroupId : vars.orgId
+}]]]></http:uri-params>
+                    </http:request>
+                    <ee:transform doc:name="Transform Message" doc:id="492e70b3-c303-49c2-8614-db3a1f400569">
+                        <ee:message>
+                            <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload['applicationData']]]></ee:set-payload>
+                        </ee:message>
+                        <ee:variables />
+                    </ee:transform>
+                </route>
+            </scatter-gather>
+            <ee:transform doc:name="Merge all API Reports, format fields and choose fields to display" doc:id="3a422e01-96f1-4050-997e-0dd586d77cc6">
+                <ee:message>
+                    <ee:set-payload><![CDATA[%dw 2.0
+import * from dw::core::Arrays
+output application/json
+
+// 1) Gather all payload arrays from the indexed object
+var lists = valuesOf(payload) map ((x) -> x.payload default [])
+
+// 2) Flatten to a single array of app records coming from all routes
+var flat = flatten(lists)
+
+// 3) Group the combined list by appId
+var byId = flat groupBy ((item) -> item.appId)
+
+// 4) For each appId, merge all objects into one (later entries override earlier fields)
+var merged = byId pluck (items) -> 
+  (items reduce ((acc, it) -> acc ++ it))
+
+---
+merged map (o) -> {
+  appId: o.appId,
+  envId: o.envId,
+  envName: o.envName,
+  orgId: o.orgId,
+  orgName: o.orgName,
+  "API Calls": (o.requestVolume default "0") as String,
+  "Successful Requests (API Calls)": (o.successfulRequests default "0") as String,
+  "Failed Requests": (o.failedRequests default "0") as String,
+  "Response Time(ms)": ((o.responseTime default "0") as Number) as String {format: "#0.00"},
+  "CPU Utilization(%)": ((o.cpuUtilization default "0") as Number) as String {format: "#0.00"},
+  "Total Memory (MB)": ((o.totalMemory default "0" as Number)/1000000) as String {format: "#0.00"},
+  "Memory Utilization (MB)": ((o.memoryUtilization default "0" as Number)/1000000) as String {format: "#0.00"},
+  "Memory Pressure (%)": ((o.memoryPressure default "0") as Number) as String {format: "#0.00"},
+  targetId: o.targetId
+}]]></ee:set-payload>
+                </ee:message>
+                <ee:variables />
+            </ee:transform>
+            <logger level="INFO" doc:name="Logger1" doc:id="276f4695-ba3f-4989-a3b5-42131bb5fdae" message="All Reports consolidated for one Environment - Environment: #[vars.environment.name]" />
+            <ee:transform doc:name="Concatenate the APIs in this Enviornment with the APIs in other Environments" doc:id="6f83dcf6-daa3-44e5-bdf9-62a82a88d04f">
+                <ee:message />
+                <ee:variables>
+                    <ee:set-variable variableName="allAPIs"><![CDATA[%dw 2.0
+output application/java
+---
+vars.allAPIs ++ payload]]></ee:set-variable>
+                </ee:variables>
+            </ee:transform>
+        </foreach>
+        <logger level="INFO" doc:name="Logger1" doc:id="0bcd69f3-7222-46ea-a889-0dc37bc7f94c" message="All Reports from All Environments have been consolidated. Producing report..." />
+        <ee:transform doc:name="Produce Report CSV" doc:id="a3e80138-e496-4bc6-92d7-cd4e9a147171">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+import * from dw::core::Dates
+output application/csv quoteValues = true
+---
+vars.allAPIs]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <logger level="INFO" doc:name="Logger2" doc:id="0b55c31c-c6a9-4ab8-b204-610b0380d332" message="Report produced and returned successfully" />
+    </flow>
+    <flow name="get:\business-groups\(businessGroupId)\runtime-manager\mule-applications:anypoint-c4e-reports-config" doc:id="f6d4fee8-eb5a-40ac-8d7b-e9284065a338">
+        <flow-ref doc:name="Flow Reference for Token and Envs" doc:id="7d7848b2-5e6e-48de-979c-cb0acfad6aea" name="generatetoken-and-list-all-environments-per-BG-Sub_Flow" />
+        <logger level="INFO" doc:name="Logger" doc:id="d3a7aeea-8e00-42bf-ac26-b3fca68b3f06" message="Preparing to iterate for Each Environment in a Business Group" />
+        <foreach doc:name="For Each" doc:id="d3e54f4a-4aba-42b5-8a41-a481832ac85f" collection="payload">
+            <ee:transform doc:name="environment" doc:id="d7ca91b6-3d49-4876-a237-a9d9efc62a65">
+                <ee:message />
+                <ee:variables>
+                    <ee:set-variable variableName="environment"><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-variable>
+                </ee:variables>
+            </ee:transform>
+            <logger level="INFO" doc:name="Logger" doc:id="908d754a-24b6-4a7e-b90c-bcd33725d316" message="Preparing to HTTP Request and get all MuleAPIs in the Environment: #[vars.environment.name]" />
+            <http:request doc:name="Get all APIs in envrionment" doc:id="8e96c63d-bcc6-4d79-b183-e2742410b884" config-ref="HTTPS_Request_configuration" path="/cloudhub/api/v2/applications" sendCorrelationId="AUTO">
+                <http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : vars.access_token,
+	"X-ANYPNT-ENV-ID" : vars.environment.id,
+	"X-ANYPNT-ORG-ID" : vars.orgId
+}]]]></http:headers>
+            </http:request>
+            <ee:transform doc:name="append allAPIs to var allAPIs plus this Environment" doc:id="007df7d6-c1f0-410d-9c1e-401792eea814">
+                <ee:message />
+                <ee:variables>
+                    <ee:set-variable variableName="allAPIs"><![CDATA[%dw 2.0
+output application/java
+---
+vars.allAPIs ++ [{
+    environment: vars.environment,
+    applications: payload
+}]]]></ee:set-variable>
+                </ee:variables>
+            </ee:transform>
+        </foreach>
+        <logger level="INFO" doc:name="Logger1" doc:id="c0cc33d8-f930-4df8-bab9-8d3f5b4ed42a" message="All APIs in All Environments have been consolidated. Preparing the output..." />
+        <ee:transform doc:name="add Environment to each API" doc:id="f6190a17-bde3-43ac-9b7e-edcaabb69a3c">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.allAPIs map (envRec) -> {
+  environment: envRec.environment,
+  applications: envRec.applications map (app) ->
+    app ++ {
+ environmentId:
+      environment: {
+        id: envRec.environment.id,
+        name: envRec.environment.name,
+        'type': envRec.environment['type'],
+        isProduction: envRec.environment.isProduction,
+        organizationId: envRec.environment.organizationId
+      }
+    }
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <ee:transform doc:name="Show only relevant fields and Calculate TotalvCore per API" doc:id="4b438dfd-06c0-47ed-aa2e-c17da17bb725">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+import * from dw::core::Dates
+output application/csv quoteValues = true
+
+
+var pick = (app, env) -> {
+  "Business Group Id": env.organizationId,
+  "Env. Name": env.name,
+  "Env. Id": env.id,
+  "Env. Type": env['type'],
+  "Production Env.": env.isProduction,
+  "API": app.domain,
+  "API Domain": app.fullDomain,
+  "API Status": app.status,
+  "Mule Version": app.muleVersion.version,
+  "MuleVersion End Of Support Date": app.muleVersion.endOfSupportDate as DateTime {unit : "milliseconds"}, 
+  "Worker vCores Total": ((app.workers['type'].weight as Number) * (app.workers.amount as Number)),
+  "Worker Weight": app.workers['type'].weight,
+  "Worker CPU": app.workers['type'].cpu,
+  "Worker Memory": app.workers['type'].memory,
+  "Worker Amount": app.workers.amount,
+  "API Version Id": app.versionId,  
+  "MuleVersion UpdateId": app.muleVersion.updateId,
+  "MuleVersion LatestUpdateId": app.muleVersion.latestUpdateId,
+  "API LastUpdateTime": app.lastUpdateTime as DateTime {unit : "milliseconds"},  
+  FileName: app.fileName,
+  Region: app.region,
+  persistentQueues: app.persistentQueues,
+  persistentQueuesEncryptionEnabled: app.persistentQueuesEncryptionEnabled,
+  persistentQueuesEncrypted: app.persistentQueuesEncrypted,
+  monitoringEnabled: app.monitoringEnabled,
+  monitoringAutoRestart: app.monitoringAutoRestart,
+  staticIPsEnabled: app.staticIPsEnabled,
+  hasFile: app.hasFile,
+  secureDataGatewayEnabled: app.secureDataGatewayEnabled,
+  loggingNgEnabled: app.loggingNgEnabled,
+  loggingCustomLog4JEnabled: app.loggingCustomLog4JEnabled,
+  cloudObjectStoreRegion: app.cloudObjectStoreRegion,
+  insightsReplayDataRegion: app.insightsReplayDataRegion,
+  isDeploymentWaiting: app.isDeploymentWaiting,
+  "deploymentGroup.id": app.deploymentGroup.id,
+  "deploymentGroup.name": app.deploymentGroup.name,
+  updateRuntimeConfig: app.updateRuntimeConfig,
+  "workers.remainingOrgWorkers": app.workers.remainingOrgWorkers,
+  "workers.totalOrgWorkers": app.workers.totalOrgWorkers
+  
+}
+
+---
+flatten(
+  payload map (envRec) ->
+    envRec.applications map (app) ->
+      pick(app, envRec.environment)
+)]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <logger level="INFO" doc:name="Logger2" doc:id="8bc21b0c-b20a-4ff7-a5c9-403e767987fd" message="Report produced and returned successfully" />
+    </flow>
+    <flow name="get:\business-groups\(businessGroupId)\consolidated-report:anypoint-c4e-reports-config" doc:id="e3ad5bd4-a3ee-43fb-bae8-ce3f8463461d">
+        <flow-ref doc:name="Flow Reference for Token and Envs" doc:id="3f745dec-edfb-431f-8b48-48d937b12dfd" name="generatetoken-and-list-all-environments-per-BG-Sub_Flow" />
+        <logger level="INFO" doc:name="Logger" doc:id="a2a32048-d800-4974-b137-45afe31aa4ec" message="consolidated-report:anypoint-c4e-reports-config: Monitoring Reports starts" />
+        <flow-ref doc:name="Monitoring Reports Flow Reference" doc:id="46877de5-66a2-4965-91c9-dedd52b15f73" name="get:\business-groups\(businessGroupId)\monitoring\reports:anypoint-c4e-reports-config" />
+        <set-variable value="#[payload]" doc:name="Set Variable vars.monitoringReport" doc:id="c195a4de-05f5-4426-b3ac-a995fb45f588" variableName="monitoringReport" />
+        <logger level="INFO" doc:name="Logger3" doc:id="c147227e-9f4c-43e2-a921-a7839fb9b799" message="consolidated-report:anypoint-c4e-reports-config: RuntimeManager Reports starts" />
+        <flow-ref doc:name="Flow Reference" doc:id="0b42b631-b450-48ba-98ee-cf307a43db97" name="get:\business-groups\(businessGroupId)\runtime-manager\mule-applications:anypoint-c4e-reports-config" />
+        <logger level="INFO" doc:name="Logger1" doc:id="e8448873-79c5-4afa-a4c0-e507b644a138" message="All Reports from All Environments have been consolidated. Producing report..." />
+        <ee:transform doc:name="Produce Report CSV1" doc:id="9000739e-67a5-44c7-814c-feee65e9164f">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/csv
+
+// 1. Robustly get Monitoring Data
+var monitoringData = if (vars.monitoringReport is String)
+    read(vars.monitoringReport, "application/csv")
+else
+    vars.monitoringReport
+
+// 2. Robustly get Runtime Data
+var runtimeData = if (payload is String)
+    read(payload, "application/csv")
+else
+    payload
+
+// --- TEMPLATES (To preserve column order) ---
+
+// 3. Create a null template for Monitoring
+var monTemplate = monitoringData[0] default {}
+var nullMonObject = monTemplate mapObject ((value, key) -> (key): null)
+
+// 4. Create a null template for Runtime
+var rtmTemplate = runtimeData[0] default {}
+var nullRtmObject = rtmTemplate mapObject ((value, key) -> (key): null)
+
+// --- LOOKUPS (For fast matching) ---
+
+// 5. Create a lookup for Monitoring data
+var monLookup = monitoringData groupBy (mon) -> mon.appId
+
+// 6. Create a lookup for Runtime data
+var rtmLookup = runtimeData groupBy (rtm) -> rtm["API Domain"]
+
+// --- COMBINE ALL KEYS ---
+
+// 7. Get all unique app IDs/Domains from *both* lists
+var monKeys = monitoringData map $.appId
+var rtmKeys = runtimeData map $["API Domain"]
+var allUniqueKeys = (monKeys ++ rtmKeys) distinctBy $
+
+---
+// 8. Perform the Full Outer Join
+// Loop over *all* the unique keys we found
+allUniqueKeys map (key) -> do {
+    
+    // Get the monitoring record OR the null monitoring template
+    var monRecord = monLookup[key][0] default nullMonObject
+    
+    // Get the runtime record OR the null runtime template
+    var rtmRecord = rtmLookup[key][0] default nullRtmObject
+    
+    ---
+    // Merge them.
+    (monRecord ++ rtmRecord)
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <logger level="INFO" doc:name="Logger2" doc:id="15650339-0750-4e10-8698-8d6d5d20da79" message="Report produced and returned successfully" />
+    </flow>
+    <sub-flow name="generatetoken-and-list-all-environments-per-BG-Sub_Flow" doc:id="e7adbc60-0fe5-487b-91db-554edfe13a1e">
+        <ee:transform doc:name="var orgId" doc:id="c13b1fff-8412-4c21-a6ab-c6b4f17d6c82">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="clientId"><![CDATA[%dw 2.0
+output application/java
+---
+vars.clientId default attributes.headers['X-ANYPNT-CLIENT-ID']]]></ee:set-variable>
+                <ee:set-variable variableName="orgId"><![CDATA[%dw 2.0
+output application/java
+---
+vars.orgId default attributes.uriParams['businessGroupId']]]></ee:set-variable>
+                <ee:set-variable variableName="secretId"><![CDATA[%dw 2.0
+output application/java
+---
+vars.secretId default attributes.headers['X-ANYPNT-SECRET-ID']]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <http:request doc:name="Get Token by ConnectedApp" doc:id="bf32deaf-cbda-426b-882c-c3afce7471ca" config-ref="HTTPS_Request_configuration" method="POST" path="/accounts/api/v2/oauth2/token" sendCorrelationId="AUTO">
+            <http:body><![CDATA[#[%dw 2.0
+output application/json
+
+---
+{
+client_id: vars.clientId, 
+client_secret: vars.secretId,
+grant_type: p('anypoint.grant_type')
+}]]]></http:body>
+        </http:request>
+        <ee:transform doc:name="var token" doc:id="379b1d15-a1eb-43c4-bffe-4dde50335ab4">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="access_token"><![CDATA[%dw 2.0
+output application/java
+---
+(payload.token_type ++ " " ++ payload.access_token) as String]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <http:request doc:name="Get all Environments in a Business Group" doc:id="0002d1a7-10ca-4204-b67f-6057efc35a88" config-ref="HTTPS_Request_configuration" path="/accounts/api/organizations/{businessGroup}/environments" sendCorrelationId="AUTO">
+            <http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : vars.access_token
+}]]]></http:headers>
+            <http:uri-params><![CDATA[#[output application/java
+---
+{
+	businessGroup : vars.orgId
+}]]]></http:uri-params>
+        </http:request>
+        <ee:transform doc:name="var allEnvironments,allAPIs" doc:id="c09bbf58-3337-4b11-943f-a398de75a541">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload.data]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="allEnvironments"><![CDATA[%dw 2.0
+output application/java
+---
+payload.data]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <set-variable value="#[[]]" doc:name="Initialize allAPIs array" doc:id="a3f87e86-914c-41ea-b335-c0ca9d6a1249" variableName="allAPIs" />
+    </sub-flow>
+    <flow name="apis-with-patchnumber-in-an-environment-in-a-business-group-Flow" doc:id="2f212496-75c4-4dab-b081-9cf63f978de4" initialState="stopped">
+        <ee:transform doc:name="environmentId var and orgId var" doc:id="322885ab-0f67-46da-97fb-d006984bb018">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="environmentId"><![CDATA[%dw 2.0
+output application/java
+---
+if ( attributes.headers['X-ANYPNT-ENV-ID'] !=null) (attributes.headers['X-ANYPNT-ENV-ID']) else ( p('anypoint.X-ANYPNT-ENV-ID') )]]></ee:set-variable>
+                <ee:set-variable variableName="orgId"><![CDATA[%dw 2.0
+output application/java
+---
+if ( attributes.headers['X-ANYPNT-ORG-ID'] !=null) (attributes.headers['X-ANYPNT-ORG-ID']) else ( p('X-ANYPNT-ORG-ID') )]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <choice doc:name="Is ConnectedApp? Property has Client_Id and Client_Secret " doc:id="d9e89ca0-de23-4602-955b-7e71ab0652ed">
+            <when expression="#[(p('anypoint.client_id') != null)]">
+                <http:request doc:name="Get Token by ConnectedApp" doc:id="90670a25-5b2f-4f7d-8821-7859591cfbf4" config-ref="HTTPS_Request_configuration" method="POST" path="/accounts/api/v2/oauth2/token" sendCorrelationId="AUTO">
+                    <http:body><![CDATA[#[%dw 2.0
+output application/json
+
+---
+{
+client_id: p('anypoint.client_id'),
+client_secret: p('anypoint.client_secret'),
+grant_type: p('anypoint.grant_type')
+}]]]></http:body>
+                </http:request>
+            </when>
+            <otherwise>
+                <http:request doc:name="Get Token by Username/Password" doc:id="3f91d0d2-f242-4b94-a4c0-802471656ee9" config-ref="HTTPS_Request_configuration" method="POST" path="/accounts/login" sendCorrelationId="AUTO">
+                    <http:body><![CDATA[#[%dw 2.0
+output application/x-www-form-urlencoded
+
+---
+{
+username: p('anypoint.username'),
+password: p('anypoint.password')
+}
+
+/*
+client_id: p('anypoint.client_id'),
+client_secret: p('anypoint.client_secret'),
+grant_type: p('anypoint.grant_type')
+ * 
+ */]]]></http:body>
+                </http:request>
+            </otherwise>
+        </choice>
+        <ee:transform doc:name="var token" doc:id="2140da32-87ac-48d7-aaf6-f600295fa193">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="access_token"><![CDATA[%dw 2.0
+output application/java
+---
+(payload.token_type ++ " " ++ payload.access_token) as String]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <http:request doc:name="Get all APIs in envrionment" doc:id="ec087be1-0b26-4492-bee9-019f3b237945" config-ref="HTTPS_Request_configuration" path="/cloudhub/api/v2/applications" sendCorrelationId="AUTO">
+            <http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : vars.access_token,
+	"X-ANYPNT-ENV-ID" : vars.environmentId,
+	"X-ANYPNT-ORG-ID" : vars.orgId
+}]]]></http:headers>
+        </http:request>
+        <ee:transform doc:name="Json Payload and two auxiliary vars" doc:id="3d4eebc3-1d45-4532-b362-c9b0635d6d18">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="allAPIS"><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <foreach doc:name="For Each" doc:id="7fc8c821-4e24-4a4c-bfe4-18d947ac0679" collection="payload">
+            <ee:transform doc:name="vars cloudhubAPI,muleVersion,patchId" doc:id="7a437528-cf59-45cb-8add-ffe72b796139">
+                <ee:message />
+                <ee:variables>
+                    <ee:set-variable variableName="muleVersion"><![CDATA[%dw 2.0
+output application/java
+---
+payload["muleVersion"]["version"]]]></ee:set-variable>
+                    <ee:set-variable variableName="patchId"><![CDATA[%dw 2.0
+output application/java
+---
+payload["muleVersion"]["updateId"]]]></ee:set-variable>
+                    <ee:set-variable variableName="cloudhubAPI"><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-variable>
+                </ee:variables>
+            </ee:transform>
+            <try doc:name="Try" doc:id="18ed46a8-b322-415c-bb99-08f20f3bb508">
+                <http:request doc:name="Get UpdateName from updateId" doc:id="6d27f6c6-9f69-444d-bc3d-a96d9dbd6e94" config-ref="HTTPS_Request_configuration" path="#[&quot;/cloudhub/api/mule-versions/&quot; ++ vars.muleVersion ++ &quot;/updates/&quot; ++ vars.patchId]" sendCorrelationId="AUTO">
+                    <http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : vars.access_token,
+	"X-ANYPNT-ENV-ID" : vars.environmentId,
+	"X-ANYPNT-ORG-ID" : vars.orgId
+}]]]></http:headers>
+                </http:request>
+                <error-handler>
+                    <on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="ce2f10ed-c2b0-4199-8ebf-73862037e624">
+                        <logger level="INFO" doc:name="Logger" doc:id="451be948-f210-4216-97e4-298e5494fb63" message="This exception may have been caused by an API Gateway API. API Gateway APIs cannot be found using the UpdateID, the HTTP Request does not retrieve the API Gateway patch details" />
+                    </on-error-continue>
+                </error-handler>
+            </try>
+            <ee:transform doc:name="Aggregate PatchDate to CloudhubAPI" doc:id="72f13d08-39ca-4c5b-8a71-15e649b4e7b0">
+                <ee:message />
+                <ee:variables>
+                    <ee:set-variable variableName="allAPIS"><![CDATA[%dw 2.0
+output application/java
+import mergeWith from dw::core::Objects
+var angelTest = 		{"patchName" : "angelTestangelTestangelTestangelTestangelTestangelTestangelTestangelTestangelTest"}
+var patchName = 			if(payload.name != null ) (payload.name) else ""
+var muleRTVersion = 		{"muleVersion" : vars.muleVersion}
+var patchReleaseDate = 	if(payload.releaseDate != null ) {"patchReleaseDate" : (payload.releaseDate as DateTime {unit : "milliseconds"})} else ""
+var indexForEach = 		(itemSequenceInfo.position as Number)
+---
+vars.AllAPIS map ((oneAPI) ->
+    oneAPI update {
+        case muleVersion at .muleVersion.version if( oneAPI.domain == vars.cloudhubAPI.domain ) -> (oneAPI.muleVersion.version ++ "/" ++ patchName as String)
+    }
+)
+
+//vars.AllAPIS map {
+//	($  update { case .muleVersion! if( $.domain == vars.cloudhubAPI.domain) -> payload.name})
+//}
+
+
+
+
+//	vars.allAPIS[indexForEach] mergeWith patchName	
+//vars.AllAPIS[0] update {
+//	case .ragnarok! -> "Odin"}
+	
+	/*
+	 * %dw 2.0
+import mergeWith from dw::core::Objects
+output application/json
+var users = [
+   {
+      "ownerId":"0",
+      "runtime" : {
+          "version" : "123",
+          "runtime" : "4.3"
+      },
+      "name":"DataWeave"
+   },
+   {
+      "ownerId":"1",
+            "runtime" : {
+          "version" : "345",
+          "runtime" : "4.1"
+      },
+      "name":"BAT"
+   },
+   {
+      "ownerId":"2",
+            "runtime" : {
+          "version" : "567",
+          "runtime" : "4.4"
+      },
+      "name":"DataSense"
+   }
+]
+---
+users map ((user) ->
+    user update {
+        case runtime at .runtime.version if( user["ownerId"] == (1 ++ "")) -> "Zeus"
+    }
+)
+//$  update { case .ownerId! if($$==1) -> "pangel"}),
+	 */]]></ee:set-variable>
+                </ee:variables>
+            </ee:transform>
+        </foreach>
+        <ee:transform doc:name="Transform Message" doc:id="e8fdd571-6659-47f3-abd5-8cfeff826552">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.allAPIs]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <ee:transform doc:name="Return Aggregated var allAPIs" doc:id="42cd4259-fcbc-4aff-a003-e7fa6fc0ca74">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/csv quoteValues = true
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	versionId: payload01.versionId,
+	domain: payload01.domain,
+	fullDomain: payload01.fullDomain,
+	"properties.anypoint.platform.config.analytics.agent.enabled": payload01.properties."anypoint.platform.config.analytics.agent.enabled",
+	status: payload01.status,
+	"workers.type.weight": payload01.workers['type'].weight,
+	"workers.type.cpu": payload01.workers['type'].cpu,
+	"workers.type.memory": payload01.workers['type'].memory,
+	"workers.amount": payload01.workers.amount,
+	"workers.remainingOrgWorkers": payload01.workers.remainingOrgWorkers,
+	"workers.totalOrgWorkers": payload01.workers.totalOrgWorkers,
+	lastUpdateTime: payload01.lastUpdateTime,
+	fileName: payload01.fileName,
+	"muleVersion.version": payload01.muleVersion.version,
+	"muleVersion.updateId": payload01.muleVersion.updateId,
+	"muleVersion.latestUpdateId": payload01.muleVersion.latestUpdateId,
+	"muleVersion.endOfSupportDate": payload01.muleVersion.endOfSupportDate,
+	"previousMuleVrsn.version": payload01.previousMuleVersion.version,
+	"previousMuleVrsn.updateId": payload01.previousMuleVersion.updateId,
+	"previousMuleVrsn.endOfSupportDate": payload01.previousMuleVersion.endOfSupportDate,
+	region: payload01.region,
+	persistentQueues: payload01.persistentQueues,
+	persistentQueuesEncryptionEnabled: payload01.persistentQueuesEncryptionEnabled,
+	persistentQueuesEncrypted: payload01.persistentQueuesEncrypted,
+	monitoringEnabled: payload01.monitoringEnabled,
+	monitoringAutoRestart: payload01.monitoringAutoRestart,
+	staticIPsEnabled: payload01.staticIPsEnabled,
+	hasFile: payload01.hasFile,
+	secureDataGatewayEnabled: payload01.secureDataGatewayEnabled,
+	loggingNgEnabled: payload01.loggingNgEnabled,
+	loggingCustomLog4JEnabled: payload01.loggingCustomLog4JEnabled,
+	cloudObjectStoreRegion: payload01.cloudObjectStoreRegion,
+	insightsReplayDataRegion: payload01.insightsReplayDataRegion,
+	isDeploymentWaiting: payload01.isDeploymentWaiting,
+	"deploymentGroup.id": payload01.deploymentGroup.id,
+	"deploymentGroup.name": payload01.deploymentGroup.name,
+	updateRuntimeConfig: payload01.updateRuntimeConfig
+	}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>

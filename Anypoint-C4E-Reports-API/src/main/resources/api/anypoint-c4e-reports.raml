@@ -1,0 +1,113 @@
+#%RAML 1.0
+title: Anypoint C4E Reports
+version: v1
+
+traits:
+  auth-bg:
+    headers:
+      X-ANYPNT-CLIENT-ID:
+        type: string
+        required: true
+        description: "Anypoint Client ID. Overrides configuration properties."
+        example: "bbbbbbbb-aaaa-0000-1111-exampleclien"
+      X-ANYPNT-SECRET-ID:
+        type: string
+        required: true
+        description: "Anypoint Client Secret. Overrides configuration properties."
+        example: "bbbbbbbb-aaaa-0000-1111-examplesecre"
+
+/business-groups:
+  /{businessGroupId}:
+    uriParameters:
+      businessGroupId:
+        type: string
+        description: "The ID of the Anypoint Business Group."
+        example: "bbbbbbbb-aaaa-0000-1111-exampleBG345"
+
+    /runtime-manager/mule-applications:
+      is: [ auth-bg ]
+      get:
+        description: "Gets a CSV report of all deployed Runtime Manager Mule applications (with vCore, status, etc.) in all Environments in a Business Group."
+        responses:
+          200:
+            body:
+              application/csv:
+                description: "A CSV report of Runtime Manager Mule applications and their runtime details."
+                example: |
+                  Business Group Id,Env. Name,Env. Id,Env. Type,Production Env.,API,API Domain,API Status,Mule Version,MuleVersion End Of Support Date,Worker vCores Total,Worker Weight,Worker CPU,Worker Memory,Worker Amount,API Version Id,MuleVersion UpdateId,MuleVersion LatestUpdateId,API LastUpdateTime,FileName,Region,persistentQueues,persistentQueuesEncryptionEnabled,persistentQueuesEncrypted,monitoringEnabled,monitoringAutoRestart,staticIPsEnabled,hasFile,secureDataGatewayEnabled,loggingNgEnabled,loggingCustomLog4JEnabled,cloudObjectStoreRegion,insightsReplayDataRegion,isDeploymentWaiting,deploymentGroup.id,deploymentGroup.name,updateRuntimeConfig,workers.remainingOrgWorkers,workers.totalOrgWorkers
+                  "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","Design","env-design-1234-5678-90abcdef","design","false","hsbc-dw-mapping-gshq","hsbc-dw-mapping-gshq.us-w1.cloudhub.io","UNDEPLOYED","4.1.5","2020-11-03T00:00:00Z","0.2","0.2","0.2 vCores","1 GB memory","1","1d0ccd0b583c661eb2c27f8a","12e27c7a94ad35754fb154f2","12e27c7a94ad35754fb154f2","2023-02-15T23:29:33.167Z","hsbc-dw-mapping-gshq.jar","us-west-1","false","false","false","true","false","false","true","false","true","false","us-west-1","us-west-1","false","1ac685b0de9e5022ac802746","US West (N. California)","true","1","1"
+                  "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","QA","env-qa-5678-1234-abcdef90","sandbox","false","angelalberici-proxy-app-ch1-qa","angelalberici-proxy-app-ch1-qa.de-c1.cloudhub.io","UNDEPLOYED","4.9-java17","2026-08-06T20:33:18.773Z","0.1","0.1","0.1 vCores","500 MB memory","1","18fb47b1c4977635e5dae29e","18dec8114502a937f9c3f82c","190a33af7a4d2c1122f511f4","2025-10-24T10:17:01.551Z","angelalberici-proxy-app-ch1-qa-api-gateway.jar","eu-central-1","false","false","false","true","true","false","true","false","true","false","","eu-central-1","false","1ac685b0de9e5022ac80274c","EU (Frankfurt)","false","2.6","2.6"
+                  "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","QA","env-qa-5678-1234-abcdef90","sandbox","false","angelalberici-diffproxy-app-ch1-qa","angelalberici-diffproxy-app-ch1-qa.de-c1.cloudhub.io","UNDEPLOYED","4.9-java17","2026-08-06T20:33:18.773Z","0.1","0.1","0.1 vCores","500 MB memory","1","18fb47f612f5ab70ebc89626","18dec8114502a937f9c3f82c","190a33af7a4d2c1122f511f4","2025-10-24T10:16:59.479Z","angelalberici-diffproxy-app-ch1-qa-api-gateway.jar","eu-central-1","false","false","false","true","true","false","true","false","true","false","","eu-central-1","false","1ac685b0de9e5022ac80274c","EU (Frankfurt)","false","2.6","2.6"
+                  "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","Sandbox","env-sandbox-abcd-ef01-234567","sandbox","false","jukebox2025-custom-log-appender","jukebox2025-custom-log-appender.de-c1.cloudhub.io","UNDEPLOYED","4.9-java17","2026-08-06T20:33:18.773Z","0.1","0.1","0.1 vCores","500 MB memory","1","17caf12e5887990a8ba89b3b","18dec8114502a937f9c3f82c","190a33af7a4d2c1122f511f4","2025-10-17T19:53:13.893Z","jukebox2025-custom-log-appender-1.0.2-mule-application.jar","eu-central-1","false","false","false","true","true","false","true","false","true","true","eu-central-1","eu-central-1","false","1ac685b0de9e5022ac80274c","EU (Frankfurt)","false","2.3","2.6"
+
+    /api-manager/api-instances:
+      is: [ auth-bg ]
+      get:
+        description: "Gets a CSV report of all API Instances configured in API Manager in all Environments in a Business Group"
+        responses:
+          200:
+            body:
+              application/csv:
+                description: "A CSV report of API Manager API Instances."
+                example: |
+                  masterOrganizationId,organizationId,apiEnvironmentId,Environment Name,Environment Type,Env. is Prod,API Instance ID (apiId),apiStatus,exchangeAssetName,Asset Name,apiTechnology,apiProductVersion,apiEndpointType,totalApis,apiActiveContractsCount,RuntimeManager API Name CH1 or ID CH2 or empty if Auto-Discovery (endpointApplicationId),assetAuditCreatedDate,assetAuditUpdatedDate,apiLastActiveDate,RuntimeManager endpointTargetId,RuntimeManager endpointExpectedStatus,assetDbId,groupId,assetId,apiAutodiscoveryInstanceName,assetAutodiscoveryApiName,apiAssetVersion,apiProductVersion,apiEndpointUri,apiIsPublic,apiDeprecated,apiMetadata,apiPinned
+                  "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","env-qa-1234-abcd-5678efgh90","QA","sandbox","false","20572548","inactive","angelalberici-diffproxy-app-ch1-spec","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:angelalberici-diffproxy-app-ch1-spec","mule4","v1","http","1","0","angelalberici-diffproxy-app-ch1-qa","2025-10-24T09:33:41.222Z","","2025-10-24T10:16:34.850Z","","deployed","213626133","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","angelalberici-diffproxy-app-ch1-spec","v1:20572548","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:angelalberici-diffproxy-app-ch1-spec","1.0.0","v1","","false","false","","false"
+                  "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","env-qa-1234-abcd-5678efgh90","QA","sandbox","false","20572546","inactive","angelalberici-proxy-app-spec","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:angelalberici-proxy-app-spec","mule4","v1","http","1","0","angelalberici-proxy-app-ch1-qa","2025-10-23T15:01:22.198Z","","2025-10-24T10:16:28.850Z","","deployed","213625689","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","angelalberici-proxy-app-spec","v1:20572546","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:angelalberici-proxy-app-spec","1.0.0","v1","","false","false","","false"
+                  "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","env-sandbox-5678-efgh-1234abcd","Sandbox","sandbox","false","20571360","active","angelalberici-proxy-app-spec","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:angelalberici-proxy-app-spec","mule4","v1","http","2","0","angelalberici-proxy-app-ch1","2025-10-23T15:01:22.198Z","","2025-11-10T09:42:58.455Z","","deployed","213625689","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","angelalberici-proxy-app-spec","v1:20571360","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:angelalberici-proxy-app-spec","1.0.0","v1","","false","false","","false"
+                  "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","env-sandbox-5678-efgh-1234abcd","Sandbox","sandbox","false","20571368","active","angelalberici-proxy-app-spec","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:angelalberici-proxy-app-spec","mule4","v1","http","2","0","app-id-9876-xyz-5432abc","2025-10-23T15:01:22.198Z","","2025-11-10T09:42:41.636Z","cloudhub-eu-central-1","deployed","213625689","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","angelalberici-proxy-app-spec","v1:20571368","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:angelalberici-proxy-app-spec","1.0.0","v1","","false","false","","false"
+                  "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","env-sandbox-5678-efgh-1234abcd","Sandbox","sandbox","false","20455424","active","demonstration-for-a-proxy-application","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:demonstration-for-a-proxy-application","mule4","v1","http","1","0","demonstration-for-a-proxy-application","2025-07-30T16:57:03.456Z","","2025-11-10T09:42:16.897Z","","deployed","213579759","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","demonstration-for-a-proxy-application","v1:20455424","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:demonstration-for-a-proxy-application","1.0.0","v1","https://google.com","false","false","","false"
+                  "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","env-sandbox-5678-efgh-1234abcd","Sandbox","sandbox","false","20262690","active","Juke Box 2025","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:juke-box-2025","flexGateway","v1","raml","3","0","app-id-4567-abc-1234xyz","2025-03-21T16:55:58.455Z","","","target-id-1234-qwe-5678asd","deployed","213500178","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","juke-box-2025","v1:20262690","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:juke-box-2025","1.0.0","v1","","false","false","","false"
+                  "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","env-sandbox-5678-efgh-1234abcd","Sandbox","sandbox","false","20572577","active","Juke Box 2025","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:juke-box-2025","mule4","v1","raml","3","0","","2025-03-21T16:55:58.455Z","","2025-11-10T09:42:48.468Z","","","213500178","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","juke-box-2025","v1:20572577","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:juke-box-2025","1.0.0","v1","","false","false","","false"
+                  "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","env-sandbox-5678-efgh-1234abcd","Sandbox","sandbox","false","20572621","active","Juke Box 2025","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:juke-box-2025","mule4","v1","raml","3","0","","2025-03-21T16:55:58.455Z","","2025-11-10T09:43:05.744Z","","","213500178","b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890","juke-box-2025","v1:20572621","groupId:b1c2d3e4-f5a6-7890-b1c2-d3e4f5a67890:assetId:juke-box-2025","1.0.0","v1","http://jukebox2025-cloudhub1.de-c1.cloudhub.io/","false","false","","false"
+
+    /monitoring/reports:
+      is: [ auth-bg ]
+      get:
+        description: "Gets a consolidated CSV report of all the Anypoint Monitoring Reports (requests, performance, errors rate, cpu and memory) for all applications in all Environments in a Business Group."
+        responses:
+          200:
+            body:
+              application/csv:
+                description: "A CSV report of all Anypoint Monitoring Reports."
+                example: |
+                  appId,envId,envName,orgId,orgName,API Calls,Successful Requests (API Calls),Failed Requests,Response Time(ms),CPU Utilization(%),Total Memory (MB),Memory Utilization (MB),Memory Pressure (%),targetId
+                  "jukebox2025-qa","env-qa-1234-abcd-5678efgh90","QA","a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","Z-Example-BG","0","0","0","0.00","2.44","510.07","183.41","35.96","cloudhub-eu-central-1"
+                  "server-info-1-6-0-angel-2025","env-sandbox-5678-efgh-1234abcd","Sandbox","a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","Z-Example-BG","10895","10895","0","315.96","2.36","510.07","188.91","37.04","cloudhub-eu-central-1"
+                  "jukebox2025-cloudhub1.de-c1.cloudhub.io","env-sandbox-5678-efgh-1234abcd","Sandbox","a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","Z-Example-BG","1","0","1","2501.00","0.82","406.00","200.04","49.27","target-id-abc-123-xyz"
+                  "angelalberici-automata-2024","env-sandbox-5678-efgh-1234abcd","Sandbox","a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","Z-Example-BG","14","14","0","9.79","0.86","1789.92","269.78","15.07","cloudhub-eu-central-1"
+                  "metrics-toolkit-2025","env-sandbox-5678-efgh-1234abcd","Sandbox","a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","Z-Example-BG","48","46","2","1246.40","1.63","1020.07","331.89","32.54","cloudhub-eu-central-1"
+                  "jukebox2025","env-sandbox-5678-efgh-1234abcd","Sandbox","a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","Z-Example-BG","2712","2712","0","9.48","1.97","510.07","204.26","40.05","cloudhub-eu-central-1"
+                  "metrics-toolkit-gw","env-sandbox-5678-efgh-1234abcd","Sandbox","a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","Z-Example-BG","0","0","0","0.00","2.80","510.07","200.10","39.23","cloudhub-eu-central-1"
+                  "jukebox-java8","env-sandbox-5678-efgh-1234abcd","Sandbox","a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","Z-Example-BG","0","0","0","0.00","1.86","510.07","200.69","39.35","cloudhub-eu-central-1"
+                  "anypoint-platform-metrics-and-reports","env-sandbox-5678-efgh-1234abcd","Sandbox","a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","Z-Example-BG","0","0","0","0.00","2.38","510.07","158.50","31.07","cloudhub-eu-west-2"
+                  "angelalberici-proxy-app-ch2","env-sandbox-5678-efgh-1234abcd","Sandbox","a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890","Z-Example-BG","0","0","0","0.00","1.84","510.07","173.69","34.05","cloudhub-eu-central-1"
+
+    /consolidated-report:
+      is: [ auth-bg ]
+      get:
+        description: "A consolidated CSV report Anypoint Monitoring Reports and Runtime Manager of all applications in all environments in a Business Group"
+        responses:
+          200:
+            body:
+              application/csv:
+                description: "A consolidated CSV report Anypoint Monitoring Reports and Runtime Manager of all applications in all environments in a Business Group "
+                example: |
+                  appId,envId,envName,orgId,orgName,API Calls,Successful Requests (API Calls),Failed Requests,Response Time(ms),CPU Utilization(%),Total Memory (MB),Memory Utilization (MB),Memory Pressure (%),targetId,Business Group Id,Env. Name,Env. Id,Env. Type,Production Env.,API,API Domain,API Status,Mule Version,MuleVersion End Of Support Date,Worker vCores Total,Worker Weight,Worker CPU,Worker Memory,Worker Amount,API Version Id,MuleVersion UpdateId,MuleVersion LatestUpdateId,API LastUpdateTime,FileName,Region,persistentQueues,persistentQueuesEncryptionEnabled,persistentQueuesEncrypted,monitoringEnabled,monitoringAutoRestart,staticIPsEnabled,hasFile,secureDataGatewayEnabled,loggingNgEnabled,loggingCustomLog4JEnabled,cloudObjectStoreRegion,insightsReplayDataRegion,isDeploymentWaiting,deploymentGroup.id,deploymentGroup.name,updateRuntimeConfig,workers.remainingOrgWorkers,workers.totalOrgWorkers
+                  jukebox2025-qa,13b083af-bd38-4614-b860-79e494a9e335,QA,59995d29-ebe2-43d9-a52b-766683fd41a7,Z-AngelAlberici-BG,0,0,0,0.00,2.44,510.07,183.35,35.95,cloudhub-eu-central-1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                  server-info-1-6-0-angel-2025,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,Sandbox,59995d29-ebe2-43d9-a52b-766683fd41a7,Z-AngelAlberici-BG,10919,10919,0,315.21,2.36,510.07,188.76,37.01,cloudhub-eu-central-1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                  server-info-ch1.de-c1.cloudhub.io,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,Sandbox,59995d29-ebe2-43d9-a52b-766683fd41a7,Z-AngelAlberici-BG,18,18,0,736.61,1.97,434.12,187.81,43.26,69120b97beb51026b4a5e758,59995d29-ebe2-43d9-a52b-766683fd41a7,Sandbox,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,sandbox,false,server-info-ch1,server-info-ch1.de-c1.cloudhub.io,STARTED,4.9-java17,2026-08-06T20:33:18.773Z,0.1,0.1,0.1 vCores,500 MB memory,1,69120b97beb51026b4a5e758,690a33af7a4d2c1122f511f4,690a33af7a4d2c1122f511f4,2025-11-10T16:12:00.318Z,server-info-1.0.1-mule-application.jar,eu-central-1,false,false,false,true,true,false,true,false,true,false,eu-central-1,eu-central-1,false,5ac685b0de9e5022ac80274c,EU (Frankfurt),false,2.3000000000000003,2.6
+                  jukebox2025-cloudhub1.de-c1.cloudhub.io,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,Sandbox,59995d29-ebe2-43d9-a52b-766683fd41a7,Z-AngelAlberici-BG,1,0,1,2501.00,0.81,406.14,199.94,49.23,67dbde98e2161e76371f7927,59995d29-ebe2-43d9-a52b-766683fd41a7,Sandbox,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,sandbox,false,jukebox2025-cloudhub1,jukebox2025-cloudhub1.de-c1.cloudhub.io,STARTED,4.6-java8,2026-02-06T03:00:00Z,0.1,0.1,0.1 vCores,500 MB memory,1,67dbde98e2161e76371f7927,68dec984434aa10ead5d836d,690a331a7a4d2c1122f50d40,2025-10-17T20:12:08.041Z,jukebox-ch1-j8-1.0.1-mule-application.jar,eu-central-1,false,false,false,true,true,false,true,false,true,false,eu-central-1,eu-central-1,false,5ac685b0de9e5022ac80274c,EU (Frankfurt),false,2.3000000000000003,2.6
+                  angelalberici-automata-2024,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,Sandbox,59995d29-ebe2-43d9-a52b-766683fd41a7,Z-AngelAlberici-BG,13,13,0,10.23,0.86,1789.92,268.94,15.03,cloudhub-eu-central-1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                  metrics-toolkit-2025,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,Sandbox,59995d29-ebe2-43d9-a52b-766683fd41a7,Z-AngelAlberici-BG,90,75,15,846.06,1.63,1020.07,331.62,32.51,cloudhub-eu-central-1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                  jukebox2025,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,Sandbox,59995d29-ebe2-43d9-a52b-766683fd41a7,Z-AngelAlberici-BG,2696,2696,0,9.55,1.97,510.07,204.59,40.11,cloudhub-eu-central-1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                  metrics-toolkit-gw,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,Sandbox,59995d29-ebe2-43d9-a52b-766683fd41a7,Z-AngelAlberici-BG,0,0,0,0.00,2.81,510.07,200.46,39.30,cloudhub-eu-central-1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                  angelalberici-proxy-app-ch1.de-c1.cloudhub.io,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,Sandbox,59995d29-ebe2-43d9-a52b-766683fd41a7,Z-AngelAlberici-BG,0,0,0,0.00,1.45,412.14,183.56,44.54,68fa4344f6516a27f3fe6441,59995d29-ebe2-43d9-a52b-766683fd41a7,Sandbox,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,sandbox,false,angelalberici-proxy-app-ch1,angelalberici-proxy-app-ch1.de-c1.cloudhub.io,STARTED,4.9-java17,2026-08-06T20:33:18.773Z,0.1,0.1,0.1 vCores,500 MB memory,1,68fa4344f6516a27f3fe6441,68dec8114502a937f9c3f82c,690a33af7a4d2c1122f511f4,2025-11-10T16:20:35.171Z,angelalberici-proxy-app-ch1-api-gateway.jar,eu-central-1,false,false,false,true,true,false,true,false,true,false,,eu-central-1,false,5ac685b0de9e5022ac80274c,EU (Frankfurt),false,2.3000000000000003,2.6
+                  jukebox-java8,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,Sandbox,59995d29-ebe2-43d9-a52b-766683fd41a7,Z-AngelAlberici-BG,0,0,0,0.00,1.86,510.07,200.93,39.39,cloudhub-eu-central-1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                  anypoint-platform-metrics-and-reports,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,Sandbox,59995d29-ebe2-43d9-a52b-766683fd41a7,Z-AngelAlberici-BG,0,0,0,0.00,2.37,510.07,158.32,31.04,cloudhub-eu-west-2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                  angelalberici-proxy-app-ch2,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,Sandbox,59995d29-ebe2-43d9-a52b-766683fd41a7,Z-AngelAlberici-BG,0,0,0,0.00,1.84,510.07,173.88,34.09,cloudhub-eu-central-1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                  ,,,,,,,,,,,,,,59995d29-ebe2-43d9-a52b-766683fd41a7,Design,b163b2cf-4264-4bf3-968b-798a87ccdd83,design,false,example-byog,example-byog.us-w1.cloudhub.io,UNDEPLOYED,4.1.3,2020-11-03T00:00:00Z,0.2,0.2,0.2 vCores,1 GB memory,1,5bdc71a0d9f17213fc1dc44d,63e27d7b81d3c41061943d67,63e27d7b81d3c41061943d67,2023-02-15T23:06:41.666Z,example-byog.jar,us-west-1,false,false,false,true,false,false,true,false,true,false,us-west-1,us-west-1,false,5ac685b0de9e5022ac802746,US West (N. California),true,1,1
+                  ,,,,,,,,,,,,,,59995d29-ebe2-43d9-a52b-766683fd41a7,Design,b163b2cf-4264-4bf3-968b-798a87ccdd83,design,false,hsbc-dw-mapping-gshq,hsbc-dw-mapping-gshq.us-w1.cloudhub.io,UNDEPLOYED,4.1.5,2020-11-03T00:00:00Z,0.2,0.2,0.2 vCores,1 GB memory,1,5d0ccd0b583c661eb2c27f8a,63e27c7a94ad35754fb154f2,63e27c7a94ad35754fb154f2,2023-02-15T23:29:33.167Z,hsbc-dw-mapping-gshq.jar,us-west-1,false,false,false,true,false,false,true,false,true,false,us-west-1,us-west-1,false,5ac685b0de9e5022ac802746,US West (N.F. California),true,1,1
+                  ,,,,,,,,,,,,,,59995d29-ebe2-43d9-a52b-766683fd41a7,QA,13b083af-bd38-4614-b860-79e494a9e335,sandbox,false,angelalberici-proxy-app-ch1-qa,angelalberici-proxy-app-ch1-qa.de-c1.cloudhub.io,UNDEPLOYED,4.9-java17,2026-08-06T20:33:18.773Z,0.1,0.1,0.1 vCores,500 MB memory,1,68fb47b1c4977635e5dae29e,68dec8114502a937f9c3f82c,690a33af7a4d2c1122f511f4,2025-10-24T10:17:01.551Z,angelalberici-proxy-app-ch1-qa-api-gateway.jar,eu-central-1,false,false,false,true,true,false,true,false,true,false,,eu-central-1,false,5ac685b0de9e5022ac80274c,EU (Frankfurt),false,2.6,2.6
+                  ,,,,,,,,,,,,,,59995d29-ebe2-43d9-a52b-766683fd41a7,QA,13b083af-bd38-4614-b860-79e494a9e335,sandbox,false,angelalberici-diffproxy-app-ch1-qa,angelalberici-diffproxy-app-ch1-qa.de-c1.cloudhub.io,UNDEPLOYED,4.9-java17,2026-08-06T20:33:18.773Z,0.1,0.1,0.1 vCores,500 MB memory,1,68fb47f612f5ab70ebc89626,68dec8114502a937f9c3f82c,690a33af7a4d2c1122f511f4,2025-10-24T10:16:59.479Z,angelalberici-diffproxy-app-ch1-qa-api-gateway.jar,eu-central-1,false,false,false,true,true,false,true,false,true,false,,eu-central-1,false,5ac685b0de9e5022ac80274c,EU (Frankfurt),false,2.6,2.6
+                  ,,,,,,,,,,,,,,59995d29-ebe2-43d9-a52b-766683fd41a7,Sandbox,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,sandbox,false,jukebox2025-custom-log-appender,jukebox2025-custom-log-appender.de-c1.cloudhub.io,UNDEPLOYED,4.9-java17,2026-08-06T20:33:18.773Z,0.1,0.1,0.1 vCores,500 MB memory,1,67caf12e5887990a8ba89b3b,68dec8114502a937f9c3f82c,690a33af7a4d2c1122f511f4,2025-10-17T19:53:13.893Z,jukebox2025-custom-log-appender-1.0.2-mule-application.jar,eu-central-1,false,false,false,true,true,false,true,false,true,true,eu-central-1,eu-central-1,false,5ac685b0de9e5022ac80274c,EU (Frankfurt),false,2.2,2.6
+                  ,,,,,,,,,,,,,,59995d29-ebe2-43d9-a52b-766683fd41a7,Sandbox,33618b7b-efc3-4583-8f4c-7fa8198fd7f3,sandbox,false,demonstration-for-a-proxy-application,demonstration-for-a-proxy-application.ir-e1.cloudhub.io,STARTED,4.9-java17,2026-08-06T20:33:18.773Z,0.1,0.1,0.1 vCores,500 MB memory,1,688a4ee1316bc063cf3d390c,68dec8114502a937f9c3f82c,690a33af7a4d2c1122f511f4,2025-10-17T21:17:00.929Z,demonstration-for-a-proxy-application-api-gateway.jar,eu-west-1,false,false,false,true,false,false,true,false,true,false,,eu-west-1,false,5ac685b0de9e5022ac80274d,EU (Ireland),false,2.3000000000000003,2.6

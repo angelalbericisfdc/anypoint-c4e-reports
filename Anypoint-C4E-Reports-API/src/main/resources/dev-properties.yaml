@@ -1,0 +1,3 @@
+anypoint:
+  grant_type:     "client_credentials" 
+

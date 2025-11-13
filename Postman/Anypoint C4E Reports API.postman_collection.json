@@ -1,0 +1,283 @@
+{
+	"info": {
+		"_postman_id": "37ffc642-9646-43b4-9a1f-50c65b9192f7",
+		"name": "Anypoint C4E Reports API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16693471",
+		"_collection_link": "https://mulesoft-api.postman.co/workspace/My-Workspace~b17d58d3-5ee2-4eda-83ea-995a4bd3cbb9/collection/16693471-37ffc642-9646-43b4-9a1f-50c65b9192f7?action=share&source=collection_link&creator=16693471"
+	},
+	"item": [
+		{
+			"name": "/business-groups/{bgId}/",
+			"item": [
+				{
+					"name": "/runtime-manager/mule-applications",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-ANYPNT-CLIENT-ID",
+								"value": "{{report_client_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-ANYPNT-SECRET-ID",
+								"value": "{{report_secret_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{c4e-report-mule-app-url}}/api/business-groups/:businessGroupId/runtime-manager/mule-applications",
+							"host": [
+								"{{c4e-report-mule-app-url}}"
+							],
+							"path": [
+								"api",
+								"business-groups",
+								":businessGroupId",
+								"runtime-manager",
+								"mule-applications"
+							],
+							"variable": [
+								{
+									"key": "businessGroupId",
+									"value": "{{businessGroupId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/monitoring/reports",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<style type=\"text/css\">",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+									"    .tftable tr {background-color:#ffffff;}",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+									"    .tftable tr:hover {background-color:#e0ffff;}",
+									"</style>",
+									"",
+									"<table class=\"tftable\" border=\"1\">",
+									"    <tr>",
+									"        <th>App ID</th>",
+									"        <th>Env ID</th>",
+									"        <th>Env Name</th>",
+									"        <th>Org ID</th>",
+									"        <th>Org Name</th>",
+									"        <th>Request Volume</th>",
+									"        <th>Successful Requests</th>",
+									"        <th>Failed Requests</th>",
+									"        <th>Response Time (ms)</th>",
+									"        <th>CPU Utilization (%)</th>",
+									"        <th>Total Memory (MB)</th>",
+									"        <th>Memory Utilization (MB)</th>",
+									"        <th>Memory Pressure (%)</th>",
+									"        <th>Target ID</th>",
+									"    </tr>",
+									"    ",
+									"    {{#each response}}",
+									"        <tr>",
+									"            <td>{{appId}}</td>",
+									"            <td>{{envId}}</td>",
+									"            <td>{{envName}}</td>",
+									"            <td>{{orgId}}</td>",
+									"            <td>{{orgName}}</td>",
+									"            <td>{{Request Volume}}</td>",
+									"            <td>{{Successful Requests}}</td>",
+									"            <td>{{Failed Requests}}</td>",
+									"            <td>{{Response Time(ms)}}</td>",
+									"            <td>{{CPU Utilization(%)}}</td>",
+									"            <td>{{Total Memory (MB)}}</td>",
+									"            <td>{{Memory Utilization (MB)}}</td>",
+									"            <td>{{Memory Pressure (%)}}</td>",
+									"            <td>{{targetId}}</td>",
+									"        </tr>",
+									"    {{/each}}",
+									"</table>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    var csvData = pm.response.text();",
+									"    var lines = csvData.split(\"\\n\");",
+									"    var headers = lines[0].split(\",\");",
+									"    var result = [];",
+									"",
+									"    for (var i = 1; i < lines.length; i++) {",
+									"        var obj = {};",
+									"        var currentline = lines[i].split(\",\");",
+									"",
+									"        for (var j = 0; j < headers.length; j++) {",
+									"            obj[headers[j].replace(/\"/g, \"\").trim()] = currentline[j] ? currentline[j].replace(/\"/g, \"\").trim() : \"\";",
+									"        }",
+									"        result.push(obj);",
+									"    }",
+									"",
+									"    return { response: result };",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-ANYPNT-CLIENT-ID",
+								"value": "{{report_client_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-ANYPNT-SECRET-ID",
+								"value": "{{report_secret_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{c4e-report-mule-app-url}}/api/business-groups/:businessGroupId/monitoring/reports",
+							"host": [
+								"{{c4e-report-mule-app-url}}"
+							],
+							"path": [
+								"api",
+								"business-groups",
+								":businessGroupId",
+								"monitoring",
+								"reports"
+							],
+							"variable": [
+								{
+									"key": "businessGroupId",
+									"value": "{{businessGroupId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api-manager/api-instances",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-ANYPNT-CLIENT-ID",
+								"value": "{{report_client_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-ANYPNT-SECRET-ID",
+								"value": "{{report_secret_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{c4e-report-mule-app-url}}/api/business-groups/:businessGroupId/api-manager/api-instances",
+							"host": [
+								"{{c4e-report-mule-app-url}}"
+							],
+							"path": [
+								"api",
+								"business-groups",
+								":businessGroupId",
+								"api-manager",
+								"api-instances"
+							],
+							"variable": [
+								{
+									"key": "businessGroupId",
+									"value": "{{businessGroupId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/consolidated-report",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-ANYPNT-CLIENT-ID",
+								"value": "{{report_client_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-ANYPNT-SECRET-ID",
+								"value": "{{report_secret_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{c4e-report-mule-app-url}}/api/business-groups/:businessGroupId/consolidated-report",
+							"host": [
+								"{{c4e-report-mule-app-url}}"
+							],
+							"path": [
+								"api",
+								"business-groups",
+								":businessGroupId",
+								"consolidated-report"
+							],
+							"variable": [
+								{
+									"key": "businessGroupId",
+									"value": "{{businessGroupId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

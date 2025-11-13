@@ -1,0 +1,407 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="response-CloudhubAPI-with-Patch-example-output" format="csv">
+      <types:shape format="weave" example="examples/aggregatedCloudhubAPI-output-example.csv"><![CDATA[%dw 2.0
+
+type response_CloudhubAPI_with_Patch_example_output = Array<{|  "﻿"versionId": String,   domain: String,   fullDomain: String,   "properties__anypoint.platform.config.analytics.agent.enabled": String,   status: String,   workers__type__name: String,   workers__type__weight: String,   workers__type__cpu: String,   workers__type__memory: String,   workers__amount: String,   workers__remainingOrgWorkers: String,   workers__totalOrgWorkers: String,   lastUpdateTime: String,   fileName: String,   muleVersion__version: String,   muleVersion__updateId: String,   muleVersion__latestUpdateId: String,   muleVersion__endOfSupportDate: String,   previousMuleVersion__version: String,   previousMuleVersion__updateId: String,   previousMuleVersion__endOfSupportDate: String,   region: String,   persistentQueues: String,   persistentQueuesEncryptionEnabled: String,   persistentQueuesEncrypted: String,   monitoringEnabled: String,   monitoringAutoRestart: String,   staticIPsEnabled: String,   hasFile: String,   secureDataGatewayEnabled: String,   loggingNgEnabled: String,   loggingCustomLog4JEnabled: String,   cloudObjectStoreRegion: String,   insightsReplayDataRegion: String,   isDeploymentWaiting: String,   deploymentGroup__id: String,   deploymentGroup__name: String,   updateRuntimeConfig: String,   trackingSettings__trackingLevel: String|}> {"isQuotedString": "false",
+"header": "true",
+"headerLineNumber": "0"}
+
+]]></types:shape>
+      <types:properties>
+        <types:property name="headerLineNumber" value="0"/>
+        <types:property name="header" value="true"/>
+        <types:property name="isQuotedString" value="false"/>
+      </types:properties>
+    </types:type>
+    <types:type name="response-CloudhubAPI-with-Patch-example-json" format="json">
+      <types:shape format="weave" example="aggregatedCloudhubAPI-example.json"><![CDATA[%dw 2.0
+
+type response_CloudhubAPI_with_Patch_example_json = Array<{|  versionId: String,   domain: String,   fullDomain: String,   properties: {| "anypoint.platform.config.analytics.agent.enabled": String |},   propertiesOptions: {|  |},   status: String,   workers: {|    "type": {|      name: String,       weight: Number {"typeId": "double"},       cpu: String,       memory: String    |},     amount: Number {"typeId": "int"},     remainingOrgWorkers: Number {"typeId": "double"},     totalOrgWorkers: Number {"typeId": "double"}  |},   lastUpdateTime: Number {"typeId": "double"},   fileName: String,   muleVersion: {|    version: String,     updateId: String,     latestUpdateId: String,     endOfSupportDate: Number {"typeId": "double"}  |},   previousMuleVersion: {|    version: String,     updateId: String,     endOfSupportDate: Number {"typeId": "double"}  |},   region: String,   persistentQueues: Boolean,   persistentQueuesEncryptionEnabled: Boolean,   persistentQueuesEncrypted: Boolean,   monitoringEnabled: Boolean,   monitoringAutoRestart: Boolean,   staticIPsEnabled: Boolean,   hasFile: Boolean,   secureDataGatewayEnabled: Boolean,   loggingNgEnabled: Boolean,   loggingCustomLog4JEnabled: Boolean,   cloudObjectStoreRegion: String,   insightsReplayDataRegion: String,   isDeploymentWaiting: Boolean,   deploymentGroup: {|    id: String,     name: String  |},   updateRuntimeConfig: Boolean,   trackingSettings: {| trackingLevel: String |},   logLevels: Array<Any>, 
+  ipAddresses: Array<Any>
+|}> {"example": "[{\\\"versionId\\\":\\\"60dc3553c632ee268f62e79a\\\",\\\"domain\\\":\\\"basic-ch-api-hello-world\\\",\\\"fullDomain\\\":\\\"basic-ch-api-hello-world.uk-e1.cloudhub.io\\\",\\\"properties\\\":{\\\"anypoint.platform.config.analytics.agent.enabled\\\":\\\"false\\\"},\\\"propertiesOptions\\\":{},\\\"status\\\":\\\"STARTED\\\",\\\"workers\\\":{\\\"type\\\":{\\\"name\\\":\\\"Micro\\\",\\\"weight\\\":0.1,\\\"cpu\\\":\\\"0.1 vCores\\\",\\\"memory\\\":\\\"500 MB memory\\\"},\\\"amount\\\":1,\\\"remainingOrgWorkers\\\":0.2,\\\"totalOrgWorkers\\\":0.6},\\\"lastUpdateTime\\\":1644006217058,\\\"fileName\\\":\\\"basic-ch-api-hello-world-1.0.0-SNAPSHOT-mule-application.jar\\\",\\\"muleVersion\\\":{\\\"version\\\":\\\"4.4.0\\/01-04-2022\\\",\\\"updateId\\\":\\\"61d3db0536b6517e4ffcf614\\\",\\\"latestUpdateId\\\":\\\"61fda0ee6bf97f08c583e798\\\",\\\"endOfSupportDate\\\":1662595200000},\\\"previousMuleVersion\\\":{\\\"version\\\":\\\"4.3.0\\\",\\\"updateId\\\":\\\"61d3dcca30ec354c29c539a7\\\",\\\"endOfSupportDate\\\":1678233600000},\\\"region\\\":\\\"eu-west-2\\\",\\\"persistentQueues\\\":false,\\\"persistentQueuesEncryptionEnabled\\\":true,\\\"persistentQueuesEncrypted\\\":false,\\\"monitoringEnabled\\\":true,\\\"monitoringAutoRestart\\\":true,\\\"staticIPsEnabled\\\":false,\\\"hasFile\\\":true,\\\"secureDataGatewayEnabled\\\":false,\\\"loggingNgEnabled\\\":true,\\\"loggingCustomLog4JEnabled\\\":false,\\\"cloudObjectStoreRegion\\\":\\\"eu-west-2\\\",\\\"insightsReplayDataRegion\\\":\\\"eu-west-2\\\",\\\"isDeploymentWaiting\\\":false,\\\"deploymentGroup\\\":{\\\"id\\\":\\\"5ac685b0de9e5022ac80274e\\\",\\\"name\\\":\\\"EU (London)\\\"},\\\"updateRuntimeConfig\\\":false,\\\"trackingSettings\\\":{\\\"trackingLevel\\\":\\\"DISABLED\\\"},\\\"logLevels\\\":[],\\\"ipAddresses\\\":[]},{\\\"versionId\\\":\\\"60dc3f1e545aad56225c5ac3\\\",\\\"domain\\\":\\\"basic-ch-api-hello-world-https\\\",\\\"fullDomain\\\":\\\"basic-ch-api-hello-world-https.uk-e1.cloudhub.io\\\",\\\"properties\\\":{\\\"anypoint.platform.config.analytics.agent.enabled\\\":\\\"false\\\"},\\\"propertiesOptions\\\":{},\\\"status\\\":\\\"STARTED\\\",\\\"workers\\\":{\\\"type\\\":{\\\"name\\\":\\\"Micro\\\",\\\"weight\\\":0.1,\\\"cpu\\\":\\\"0.1 vCores\\\",\\\"memory\\\":\\\"500 MB memory\\\"},\\\"amount\\\":1,\\\"remainingOrgWorkers\\\":0.2,\\\"totalOrgWorkers\\\":0.6},\\\"lastUpdateTime\\\":1641999023734,\\\"fileName\\\":\\\"basic-ch-api-hello-world-1.0.0-SNAPSHOT-mule-application.jar\\\",\\\"muleVersion\\\":{\\\"version\\\":\\\"4.3.0\\/01-04-2022\\\",\\\"updateId\\\":\\\"61d3dcca30ec354c29c539a7\\\",\\\"latestUpdateId\\\":\\\"61fda1325a08be2bfb2e5ea5\\\",\\\"endOfSupportDate\\\":1678233600000},\\\"previousMuleVersion\\\":{\\\"version\\\":\\\"4.3.0\\\",\\\"updateId\\\":\\\"61bd26523ca92d3951f503cd\\\",\\\"endOfSupportDate\\\":1678233600000},\\\"region\\\":\\\"eu-west-2\\\",\\\"persistentQueues\\\":false,\\\"persistentQueuesEncryptionEnabled\\\":true,\\\"persistentQueuesEncrypted\\\":false,\\\"monitoringEnabled\\\":true,\\\"monitoringAutoRestart\\\":true,\\\"staticIPsEnabled\\\":false,\\\"hasFile\\\":true,\\\"secureDataGatewayEnabled\\\":false,\\\"loggingNgEnabled\\\":true,\\\"loggingCustomLog4JEnabled\\\":false,\\\"cloudObjectStoreRegion\\\":\\\"eu-west-2\\\",\\\"insightsReplayDataRegion\\\":\\\"eu-west-2\\\",\\\"isDeploymentWaiting\\\":false,\\\"deploymentGroup\\\":{\\\"id\\\":\\\"5ac685b0de9e5022ac80274e\\\",\\\"name\\\":\\\"EU (London)\\\"},\\\"updateRuntimeConfig\\\":false,\\\"trackingSettings\\\":{\\\"trackingLevel\\\":\\\"DISABLED\\\"},\\\"logLevels\\\":[],\\\"ipAddresses\\\":[]},{\\\"versionId\\\":\\\"61fd8199033bc65027e67a3f\\\",\\\"domain\\\":\\\"basic-ch-hello-world-4-3-0-2022\\\",\\\"fullDomain\\\":\\\"basic-ch-hello-world-4-3-0-2022.us-e2.cloudhub.io\\\",\\\"properties\\\":{\\\"anypoint.platform.config.analytics.agent.enabled\\\":\\\"false\\\"},\\\"propertiesOptions\\\":{},\\\"status\\\":\\\"STARTED\\\",\\\"workers\\\":{\\\"type\\\":{\\\"name\\\":\\\"Micro\\\",\\\"weight\\\":0.1,\\\"cpu\\\":\\\"0.1 vCores\\\",\\\"memory\\\":\\\"500 MB memory\\\"},\\\"amount\\\":1,\\\"remainingOrgWorkers\\\":0.2,\\\"totalOrgWorkers\\\":0.6},\\\"lastUpdateTime\\\":1644003833203,\\\"fileName\\\":\\\"basic-ch-api-hello-world-1.0.0-SNAPSHOT-mule-application.jar\\\",\\\"muleVersion\\\":{\\\"version\\\":\\\"4.3.0\\/01-04-2022\\\",\\\"updateId\\\":\\\"61d3dcca30ec354c29c539a7\\\",\\\"latestUpdateId\\\":\\\"61fda1325a08be2bfb2e5ea5\\\",\\\"endOfSupportDate\\\":1678233600000},\\\"region\\\":\\\"us-east-2\\\",\\\"persistentQueues\\\":false,\\\"persistentQueuesEncryptionEnabled\\\":true,\\\"persistentQueuesEncrypted\\\":false,\\\"monitoringEnabled\\\":true,\\\"monitoringAutoRestart\\\":true,\\\"staticIPsEnabled\\\":false,\\\"hasFile\\\":true,\\\"secureDataGatewayEnabled\\\":false,\\\"loggingNgEnabled\\\":true,\\\"loggingCustomLog4JEnabled\\\":false,\\\"cloudObjectStoreRegion\\\":\\\"us-east-2\\\",\\\"insightsReplayDataRegion\\\":\\\"us-east-2\\\",\\\"isDeploymentWaiting\\\":false,\\\"deploymentGroup\\\":{\\\"id\\\":\\\"5ac685b0de9e5022ac802745\\\",\\\"name\\\":\\\"US East (Ohio)\\\"},\\\"updateRuntimeConfig\\\":false,\\\"trackingSettings\\\":{\\\"trackingLevel\\\":\\\"DISABLED\\\"},\\\"logLevels\\\":[],\\\"ipAddresses\\\":[]}]"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Payload" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Input-Payload.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Input_Payload = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Input-Attributes.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Input_Attributes = {|
+  clientCertificate?: {|
+    publicKey?: {|  |}, 
+    "type"?: String, 
+    encoded?: Binary
+  |}, 
+  headers: {|
+    "X-ANYPNT-CLIENT-ID": String, 
+    "X-ANYPNT-SECRET-ID": String
+  |}, 
+  listenerPath: String, 
+  method: String, 
+  queryParams: {|  |}, 
+  queryString: String, 
+  relativePath: String, 
+  remoteAddress: String, 
+  requestPath: String, 
+  requestUri: String, 
+  scheme: String, 
+  uriParams: {| businessGroupId: String |}, 
+  version: String, 
+  localAddress: String
+|}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Variables-access_token" format="java">
+      <types:shape format="raml" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Variables-allAPIs" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Input-Variables-allAPIs.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Input_Variables_allAPIs = Array<Nothing>
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Variables-clientId" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Input-Variables-clientId.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Input_Variables_clientId = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Variables-secretId" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Input-Variables-secretId.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Input_Variables_secretId = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Variables-allEnvironments" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Input-Variables-allEnvironments.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Input_Variables_allEnvironments = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Variables-orgId" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Input-Variables-orgId.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Input_Variables_orgId = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Payload" format="json">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Output-Payload.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Output_Payload = String
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Output-Attributes.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Output_Attributes = {|
+  statusCode: Number, 
+  reasonPhrase: String, 
+  headers: { _?: String }
+|} {"typeId": "org.mule.extension.http.api.HttpResponseAttributes",
+"typeAlias": "HttpResponseAttributes"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-access_token" format="java">
+      <types:shape format="raml" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-outboundHeaders" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Output-Variables-outboundHeaders.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Output_Variables_outboundHeaders = {|  |}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-allAPIs" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Output-Variables-allAPIs.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Output_Variables_allAPIs = Array<Nothing>
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-clientId" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Output-Variables-clientId.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Output_Variables_clientId = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-httpStatus" format="java">
+      <types:shape format="raml" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-secretId" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Output-Variables-secretId.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Output_Variables_secretId = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-allEnvironments" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Output-Variables-allEnvironments.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Output_Variables_allEnvironments = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-orgId" format="java">
+      <types:shape format="weave" example="weave/autogenerated/b641b708-1c3b-4ccf-b21f-084b45dd8b27/Output-Variables-orgId.wev" autogeneratedOrigin="46877de5-66a2-4965-91c9-dedd52b15f73"><![CDATA[%dw 2.0
+
+type auto_b641b708_1c3b_4ccf_b21f_084b45dd8b27_Output_Variables_orgId = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Payload" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Input-Payload.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Input_Payload = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Input-Attributes.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Input_Attributes = {|
+  clientCertificate?: {|
+    publicKey?: {|  |}, 
+    "type"?: String, 
+    encoded?: Binary
+  |}, 
+  headers: {|
+    "X-ANYPNT-CLIENT-ID": String, 
+    "X-ANYPNT-SECRET-ID": String
+  |}, 
+  listenerPath: String, 
+  method: String, 
+  queryParams: {|  |}, 
+  queryString: String, 
+  relativePath: String, 
+  remoteAddress: String, 
+  requestPath: String, 
+  requestUri: String, 
+  scheme: String, 
+  uriParams: {| businessGroupId: String |}, 
+  version: String, 
+  localAddress: String
+|}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-access_token" format="java">
+      <types:shape format="raml" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-outboundHeaders" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Input-Variables-outboundHeaders.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Input_Variables_outboundHeaders = {|  |}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-allAPIs" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Input-Variables-allAPIs.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Input_Variables_allAPIs = Array<Nothing>
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-clientId" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Input-Variables-clientId.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Input_Variables_clientId = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-monitoringReport" format="java">
+      <types:shape format="raml" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-httpStatus" format="java">
+      <types:shape format="raml" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-secretId" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Input-Variables-secretId.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Input_Variables_secretId = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-allEnvironments" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Input-Variables-allEnvironments.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Input_Variables_allEnvironments = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-orgId" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Input-Variables-orgId.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Input_Variables_orgId = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Payload" format="json">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Output-Payload.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Output_Payload = String
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Output-Attributes.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Output_Attributes = {|
+  statusCode: Number, 
+  reasonPhrase: String, 
+  headers: { _?: String }
+|} {"typeId": "org.mule.extension.http.api.HttpResponseAttributes",
+"typeAlias": "HttpResponseAttributes"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-access_token" format="java">
+      <types:shape format="raml" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-outboundHeaders" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Output-Variables-outboundHeaders.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Output_Variables_outboundHeaders = {|  |}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-allAPIs" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Output-Variables-allAPIs.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Output_Variables_allAPIs = Array<Nothing>
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-clientId" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Output-Variables-clientId.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Output_Variables_clientId = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-httpStatus" format="java">
+      <types:shape format="raml" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-monitoringReport" format="java">
+      <types:shape format="raml" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-secretId" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Output-Variables-secretId.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Output_Variables_secretId = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-allEnvironments" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Output-Variables-allEnvironments.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Output_Variables_allEnvironments = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-orgId" format="java">
+      <types:shape format="weave" example="weave/autogenerated/f6d4fee8-eb5a-40ac-8d7b-e9284065a338/Output-Variables-orgId.wev" autogeneratedOrigin="0b42b631-b450-48ba-98ee-cf307a43db97"><![CDATA[%dw 2.0
+
+type auto_f6d4fee8_eb5a_40ac_8d7b_e9284065a338_Output_Variables_orgId = Any
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#b641b708-1c3b-4ccf-b21f-084b45dd8b27">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Payload"/>
+          <types:attributes type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="access_token" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Variables-access_token"/>
+          <types:variable name="allAPIs" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Variables-allAPIs"/>
+          <types:variable name="clientId" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Variables-clientId"/>
+          <types:variable name="secretId" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Variables-secretId"/>
+          <types:variable name="allEnvironments" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Variables-allEnvironments"/>
+          <types:variable name="orgId" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Input-Variables-orgId"/>
+        </types:variables>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Payload"/>
+          <types:attributes type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="access_token" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-access_token"/>
+          <types:variable name="outboundHeaders" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-outboundHeaders"/>
+          <types:variable name="allAPIs" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-allAPIs"/>
+          <types:variable name="clientId" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-clientId"/>
+          <types:variable name="httpStatus" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-httpStatus"/>
+          <types:variable name="secretId" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-secretId"/>
+          <types:variable name="allEnvironments" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-allEnvironments"/>
+          <types:variable name="orgId" type="auto_b641b708-1c3b-4ccf-b21f-084b45dd8b27_Output-Variables-orgId"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#f6d4fee8-eb5a-40ac-8d7b-e9284065a338">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Payload"/>
+          <types:attributes type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="access_token" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-access_token"/>
+          <types:variable name="outboundHeaders" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-outboundHeaders"/>
+          <types:variable name="allAPIs" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-allAPIs"/>
+          <types:variable name="clientId" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-clientId"/>
+          <types:variable name="monitoringReport" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-monitoringReport"/>
+          <types:variable name="httpStatus" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-httpStatus"/>
+          <types:variable name="secretId" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-secretId"/>
+          <types:variable name="allEnvironments" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-allEnvironments"/>
+          <types:variable name="orgId" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Input-Variables-orgId"/>
+        </types:variables>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Payload"/>
+          <types:attributes type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="access_token" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-access_token"/>
+          <types:variable name="outboundHeaders" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-outboundHeaders"/>
+          <types:variable name="allAPIs" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-allAPIs"/>
+          <types:variable name="clientId" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-clientId"/>
+          <types:variable name="httpStatus" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-httpStatus"/>
+          <types:variable name="monitoringReport" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-monitoringReport"/>
+          <types:variable name="secretId" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-secretId"/>
+          <types:variable name="allEnvironments" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-allEnvironments"/>
+          <types:variable name="orgId" type="auto_f6d4fee8-eb5a-40ac-8d7b-e9284065a338_Output-Variables-orgId"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
